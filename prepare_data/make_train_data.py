@@ -2,7 +2,7 @@ import cv2
 import os
 
 label = "Vu"
-save_path = os.path.join(r"D:data_ML\train_data", label)
+save_path = os.path.join(r"D:\data_ML\data_collect\train_data", label)
 os.makedirs(save_path, exist_ok=True)
 cap = cv2.VideoCapture(0)
 i = 0
