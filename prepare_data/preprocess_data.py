@@ -6,38 +6,34 @@ from mtcnn import MTCNN
 
 # Khởi tạo detector MTCNN
 detector = MTCNN()
-
+labels = {0: 'Thang', 1: 'Su', 2: 'Nhung', 3: 'Tuyen', 4: 'Vu', 5: 'Dat', 6: 'Huy'}
 # Thư mục dữ liệu
-train_data = r'D:\data_ML\data_collect\train_data'
-test_data = r'D:\data_ML\data_collect\test_data'
+data = r'D:\data_ML\data_collect'
 
-# Thư mục lưu ảnh cắt (train_crop_data và test_crop_data)
-train_crop_data = r'D:\data_ML\data_crop\train_data'
-test_crop_data = r'D:\data_ML\data_crop\test_data'
+# Thư mục lưu ảnh cắt
+crop_data = r'D:\data_ML\data_crop'
 
-def crop_data(dirData, save_dir, limit=100):
+def crop_data_function(dirData, save_dir, limit=100):
     data = []
-    image_count = len(os.listdir(save_dir))  # Đếm số ảnh đã cắt trong thư mục đích    
+    image_count = len(os.listdir(save_dir))  # Start by counting the images in the save_dir
+
     for folder in os.listdir(dirData):
         folder_path = os.path.join(dirData, folder)
         
-        # Kiểm tra nếu là thư mục chứa ảnh
         if os.path.isdir(folder_path):
-            # Tạo thư mục con tương ứng trong save_dir nếu chưa có
             save_folder = os.path.join(save_dir, folder)
-            os.makedirs(save_folder, exist_ok=True)
-
-            # Danh sách ảnh trong thư mục
+            os.makedirs(save_folder, exist_ok=True)  # Create save folder if not exist
             images = os.listdir(folder_path)
 
             if not images:
                 print(f"Warning: No images found in {folder_path}. Skipping...")
                 continue
 
-            random.shuffle(images)  # Xáo trộn ảnh ngẫu nhiên
+            random.shuffle(images)  # Shuffle images for randomness
+
             for file in images:
-                if image_count >= limit:  # Nếu đã đủ số lượng ảnh, dừng lại
-                    return data  # Dừng và trả về dữ liệu nếu đạt giới hạn
+                if image_count >= limit:  # Exit when we reach the limit
+                    return data
 
                 img_path = os.path.join(folder_path, file)
                 img = cv2.imread(img_path)
@@ -56,7 +52,7 @@ def crop_data(dirData, save_dir, limit=100):
 
                 # Lặp qua tất cả các khuôn mặt phát hiện được
                 for i, face in enumerate(faces):
-                    if image_count >= limit:
+                    if image_count >= limit:  # Exit when limit is reached
                         return data
 
                     x, y, w, h = face['box']
@@ -69,19 +65,18 @@ def crop_data(dirData, save_dir, limit=100):
                         print("Warning: Crop ra ảnh rỗng, bỏ qua.")
                         continue
 
-                    face_resized = cv2.resize(face_crop, (128, 128))
+                    face_resized = cv2.resize(face_crop, (128, 128))  # Resize the face to 128x128
                     img_name = f"{file.split('.')[0]}_face_{i}.png"
                     save_path = os.path.join(save_folder, img_name)
 
+                    # Lưu ảnh đã crop
                     if cv2.imwrite(save_path, face_resized):
                         print(f"Saved cropped face for {file} as {img_name}")
-                        image_count += 1  # Tăng biến đếm
-                    else:
-                        print(f"Failed to save {img_name}")
+                        image_count += 1  # Increase image count after saving
 
                     # Thêm ảnh và nhãn vào data
-                    face_input = np.expand_dims(face_resized / 255.0, axis=0)
-                    label = labels[folder]
+                    face_input = np.expand_dims(face_resized / 255.0, axis=0)  # Normalize and add batch dimension
+                    label = labels.get(folder, "Unknown")  # Default to "Unknown" if label not found
                     data.append((face_input, label))
 
                     image_count += 1  # Tăng biến đếm ảnh
@@ -90,41 +85,20 @@ def crop_data(dirData, save_dir, limit=100):
     return data
 
 
-
-def ensure_data_sufficiency(train_data_dir, test_data_dir, train_crop_data, test_crop_data, train_limit=100, test_limit=20):
-    # Kiểm tra và cắt thêm ảnh cho train data
-    for folder in os.listdir(train_data_dir):
-        folder_path = os.path.join(train_data_dir, folder)
+def ensure_data_sufficiency(data_dir, crop_data, limit=100):
+    for folder in os.listdir(data_dir):
+        folder_path = os.path.join(data_dir, folder)
         if os.path.isdir(folder_path):
-            folder_save_path = os.path.join(train_crop_data, folder)
+            folder_save_path = os.path.join(crop_data, folder)
             if not os.path.exists(folder_save_path):
                 os.makedirs(folder_save_path, exist_ok=True)  # Tạo thư mục nếu chưa có
 
             num_train_images = len(os.listdir(folder_save_path))  # Đếm số lượng ảnh trong thư mục crop
-            print(f"Folder {folder} trong train có {num_train_images} ảnh đã cắt.")
-            if num_train_images < train_limit:
-                print(f"Folder {folder} trong train thiếu {train_limit - num_train_images} ảnh. Cắt thêm...")
-                crop_data(folder_path, folder_save_path, train_limit - num_train_images)
-
-
-    # Kiểm tra và cắt thêm ảnh cho test data
-    for folder in os.listdir(test_data_dir):
-        folder_path = os.path.join(test_data_dir, folder)
-        if os.path.isdir(folder_path):
-            folder_save_path = os.path.join(test_crop_data, folder)
-            if not os.path.exists(folder_save_path):
-                os.makedirs(folder_save_path, exist_ok=True)  # Tạo thư mục nếu chưa có
-
-            num_test_images = len(os.listdir(folder_save_path))  # Đếm số lượng ảnh trong thư mục crop
-            print(f"Folder {folder} trong test có {num_test_images} ảnh đã cắt.")
-            if num_test_images < test_limit:
-                print(f"Folder {folder} trong test thiếu {test_limit - num_test_images} ảnh. Cắt thêm...")
-                crop_data(folder_path, folder_save_path, test_limit - num_test_images)
-
+            print(f"Folder {folder} có {num_train_images} ảnh đã cắt.")
+            if num_train_images < limit:
+                print(f"Folder {folder} thiếu {limit - num_train_images} ảnh.")
+                crop_data_function(folder_path, folder_save_path, limit - num_train_images)
 
 
 # Kiểm tra và đảm bảo đủ dữ liệu
-#ensure_data_sufficiency(train_data, test_data, train_crop_data, test_crop_data, train_limit=100, test_limit=20)
-
-crop_data(r"D:\data_ML\data_crop\train_data\Dat",r"D:\data_ML\data_crop\train_data\tttt",5)
-
+ensure_data_sufficiency(data, crop_data, limit=100)

@@ -7,54 +7,41 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
 from utils import evaluate_model
 
-# Định nghĩa danh sách các nhãn
 labels = {0: 'Thang', 1: 'Su', 2: 'Nhung', 3: 'Tuyen', 4: 'Vu', 5: 'Dat', 6: 'Huy'}
 
-# Đường dẫn đến thư mục chứa các file đặc trưng
 weights_dir = r'D:\GitHub\Machine_Learning\weights'
 
-# Đọc đặc trưng đã được lưu từ file .npy
 X_features = np.load(os.path.join(weights_dir, 'data_features.npy'))
 
-# Đọc nhãn từ file nếu có
 labels_list = []
 for label, name in labels.items():
     person_dir = os.path.join(r"D:\data_ML\data_crop", name)
     
-    # Gán nhãn cho ảnh huấn luyện
     for image_name in os.listdir(person_dir):
         labels_list.append(label)
 
-# Chia dữ liệu thành tập huấn luyện và tập kiểm tra (80% train, 20% test)
 X_train, X_test, y_train, y_test = train_test_split(X_features, labels_list, test_size=0.2, random_state=42)
 
-# Định nghĩa các tham số tìm kiếm cho SVM
 param_grid = {
-    'C': [0.1, 1, 10, 100],  # Thử nghiệm với các giá trị của C
-    'kernel': ['linear', 'rbf'],  # Thử nghiệm với kernel khác nhau
-    'gamma': ['scale', 'auto'],  # Các lựa chọn cho gamma (chỉ áp dụng với kernel 'rbf')
+    'C': [0.1, 1, 10, 100],  
+    'kernel': ['linear', 'rbf'],  
+    'gamma': ['scale', 'auto'],  
 }
 
-# Sử dụng GridSearchCV để tìm tham số tối ưu
 grid_search = GridSearchCV(SVC(), param_grid, cv=5, n_jobs=-1)
 grid_search.fit(X_train, y_train)
 
-# In các tham số tối ưu
 print("Tối ưu hóa GridSearchCV hoàn thành!")
 print("Tham số tối ưu:", grid_search.best_params_)
 
-# Sử dụng mô hình với các tham số tối ưu đã tìm được
 best_svm_model = grid_search.best_estimator_
 
-# Đánh giá mô hình với các tham số tối ưu
 evaluate_model(best_svm_model, X_test, y_test)
 
-# Cross-validation trên tập huấn luyện (k-fold, mặc định là 5-fold)
 cv_scores = cross_val_score(best_svm_model, X_train, y_train, cv=5)
 print(f'Cross-validation scores: {cv_scores}')
 print(f'Mean cross-validation score: {cv_scores.mean()}')
 
-# Lưu mô hình SVM tối ưu vào file sử dụng joblib
 svm_model_path = os.path.join(weights_dir, 'svm_model_ex_optimal.joblib')
 joblib.dump(best_svm_model, svm_model_path)
 print(f'Mô hình SVM tối ưu đã được lưu vào: {svm_model_path}')

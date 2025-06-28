@@ -3,7 +3,7 @@ import os
 
 
 # Đường dẫn đến thư mục chứa dữ liệu test
-test_data_path = r'D:\data_ML\data_edit\test_data'
+test_data_path = r'D:\data_ML\data_edit'
 
 # Chọn một thư mục ngẫu nhiên (tương ứng với nhãn)
 folder_name = 'Thang'  

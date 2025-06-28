@@ -16,15 +16,6 @@ seq = iaa.Sequential([
 ])
 
 def augment_random_images(input_dir, output_dir, limit=100):
-    """
-    Hàm chỉnh sửa ngẫu nhiên các ảnh trong thư mục con để làm phong phú dữ liệu.
-    Lựa chọn ngẫu nhiên một số ảnh và áp dụng augmentation.
-
-    Args:
-    - input_dir (str): Đường dẫn đến thư mục chứa ảnh gốc.
-    - output_dir (str): Đường dẫn đến thư mục lưu ảnh đã augment.
-    - limit (int): Giới hạn số lượng ảnh sẽ được chỉnh sửa.
-    """
     # Lặp qua tất cả các thư mục con trong thư mục input_dir
     for folder in os.listdir(input_dir):
         folder_path = os.path.join(input_dir, folder)
@@ -64,16 +55,12 @@ def augment_random_images(input_dir, output_dir, limit=100):
                     break
 
 # Đường dẫn đến thư mục ảnh gốc và thư mục lưu ảnh đã chỉnh sửa
-input_train_dir = r'D:\data_ML\data_crop\train_data'
-output_train_dir = r'D:\data_ML\data_edit\train_data'
+input_dir = r'D:\data_ML\data_crop'
+output_dir = r'D:\data_ML\data_edit'
 
-input_test_dir = r'D:\data_ML\data_crop\test_data'
-output_test_dir = r'D:\data_ML\data_edit\test_data'
 
 # Tạo thư mục lưu ảnh nếu chưa có
-os.makedirs(output_train_dir, exist_ok=True)
-os.makedirs(output_test_dir, exist_ok=True)
+os.makedirs(output_dir, exist_ok=True)
 
 # Gọi hàm để thực hiện chỉnh sửa ngẫu nhiên cho ảnh và ghi đè
-augment_random_images(input_train_dir, output_train_dir, limit=100)
-augment_random_images(input_test_dir, output_test_dir, limit=100)
+augment_random_images(input_dir, output_dir, limit=100)
