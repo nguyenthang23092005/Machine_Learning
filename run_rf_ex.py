@@ -18,7 +18,7 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-image_path = r"C:\Users\Nguyen Van Thang\Pictures\Camera Roll\WIN_20250626_12_57_21_Pro.jpg"
+image_path = r"C:\Users\Nguyen Van Thang\Pictures\Camera Roll\WIN_20250612_15_27_27_Pro.jpg"
 image = cv2.imread(image_path)
 image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 faces = detector.detect_faces(image_rgb)
@@ -54,6 +54,7 @@ else:
 cv2.imshow("Detected Face", image)
 output_dir = r'D:\GitHub\Machine_Learning\output\rf_ex'
 os.makedirs(output_dir, exist_ok=True)
+output_image_path = os.path.join(output_dir, 'output_image_rf.jpg')
 counter = 1
 while os.path.exists(output_image_path):
     output_image_path = os.path.join(output_dir, f'output_image_rf_{counter}.jpg')

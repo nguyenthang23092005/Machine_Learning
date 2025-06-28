@@ -10,12 +10,12 @@ knn_model = joblib.load(r"D:\GitHub\Machine_Learning\weights\knn_model_flat_opti
 labels = ['Thang', 'Su', 'Nhung', 'Tuyen', 'Vu', 'Dat', 'Huy']
 detector = MTCNN()
 
-image_path = r"C:\Users\Nguyen Van Thang\Pictures\Camera Roll\WIN_20250626_12_57_21_Pro.jpg"  
+image_path = r"C:\Users\Nguyen Van Thang\Pictures\Camera Roll\WIN_20250612_15_27_27_Pro.jpg" 
 image = cv2.imread(image_path)
 
 image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 faces = detector.detect_faces(image_rgb)
-similarity_threshold = 0.
+similarity_threshold = 0.8
 
 if faces:
     for face in faces:
@@ -46,8 +46,9 @@ else:
     cv2.putText(image, 'No face detected', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
 cv2.imshow("Detected Face", image)
-output_dir = r'D:\GitHub\Machine_Learning\output\knn_flat'
+output_dir = r"D:\GitHub\Machine_Learning\output\knn_flat"
 os.makedirs(output_dir, exist_ok=True)
+output_image_path = os.path.join(output_dir, 'output_image_knn.jpg')
 counter = 1
 while os.path.exists(output_image_path):
     output_image_path = os.path.join(output_dir, f'output_image_knn_{counter}.jpg')

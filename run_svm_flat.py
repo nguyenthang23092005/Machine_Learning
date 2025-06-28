@@ -4,12 +4,12 @@ import numpy as np
 from mtcnn import MTCNN
 import joblib 
 
-svm_model = joblib.load(r"D:\GitHub\Machine_Learning\weights\svm_model_flat_optimal.joblib")  # Thay đổi đường dẫn nếu cần
+svm_model = joblib.load(r"D:\GitHub\Machine_Learning\weights\svm_model_flat_optimal.joblib")  
 
-labels = ['Thang', 'Su', 'Nhung', 'Tuyen', 'Vu', 'Dat', 'Huy', 'Unknown']
+labels = ['Thang', 'Su', 'Nhung', 'Tuyen', 'Vu', 'Dat', 'Huy']
 detector = MTCNN()
 
-image_path = r"C:\Users\Nguyen Van Thang\Pictures\Camera Roll\WIN_20250626_12_57_21_Pro.jpg"  # Thay đổi đường dẫn ảnh của bạn
+image_path = r"C:\Users\Nguyen Van Thang\Pictures\Camera Roll\WIN_20250612_15_27_27_Pro.jpg"
 image = cv2.imread(image_path)
 
 image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -42,7 +42,7 @@ cv2.imshow("Detected Face", image)
 
 output_dir = r'D:\GitHub\Machine_Learning\output\svm_flat'
 os.makedirs(output_dir, exist_ok=True)
-
+output_image_path = os.path.join(output_dir, 'output_image_svm.jpg')
 counter = 1
 while os.path.exists(output_image_path):
     output_image_path = os.path.join(output_dir, f'output_image_svm_{counter}.jpg')
