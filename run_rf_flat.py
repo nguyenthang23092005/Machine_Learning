@@ -8,7 +8,7 @@ rf_model = joblib.load(r"D:\GitHub\Machine_Learning\weights\rf_model_flat_optima
 labels = ['Thang', 'Su', 'Nhung', 'Tuyen', 'Vu', 'Dat', 'Huy']
 detector = MTCNN()
 
-image_path = r"C:\Users\Nguyen Van Thang\Pictures\Camera Roll\WIN_20250612_15_27_27_Pro.jpg"
+image_path = r"D:\GitHub\Machine_Learning\picture\3.jpg"
 image = cv2.imread(image_path)
 image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
