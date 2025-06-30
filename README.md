@@ -6,7 +6,7 @@ Thành viên nhóm :
 - Đặng Anh Tuyền
 ## Thu thập và sử lý dữ liệu
 - Bộ dữ liệu được thu thập bằng camera.
-![HÌnh ảnh trực quan của bộ dữ liệu]()
+![HÌnh ảnh trực quan của bộ dữ liệu](./visualization/pca.png)
 - Xử lý dữ liệu bằng cách sử dụng mô hình MTCNN phát hiện khuôn mặt và cắt những khuôn mặt đó cho folder với nhãn tương ứng.
 - Sau đó kiểm tra bằng phương pháp thủ công để lọc những ảnh không đúng với nhãn.
 ## Chuẩn bị và huấn luyện mô hình nhận diện
@@ -19,9 +19,9 @@ Thành viên nhóm :
   - Mô hình Support Vector Machine
 ## Đánh giá mô hình
 - Các mô hình đặt được accuracy rất cao
-![HÌnh ảnh accuracy]()
+![HÌnh ảnh accuracy](./visualization/accuracy.png)
 ## Chạy thử thục tế
 - Các mô hình dữ báo tốt những khuôn mặt
 ![HÌnh ảnh minh họa](./output/knn_ex/output_image_knn_2.jpg)
 - Sử dụng cammera trực tiếp nhận diện đứng các khuôn mặt
-![HÌnh ảnh minh họa]()
+![HÌnh ảnh minh họa](./visualization/image.png)
