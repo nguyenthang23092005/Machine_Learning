@@ -6,7 +6,7 @@ Thành viên nhóm :
 - Đặng Anh Tuyền
 ## Thu thập và sử lý dữ liệu
 - Bộ dữ liệu được thu thập bằng camera.
-![HÌnh ảnh trực quan của bộ dữ liệu](./visualization/pac.png)
+![HÌnh ảnh trực quan của bộ dữ liệu](./visualization/pca.png)
 - Xử lý dữ liệu bằng cách sử dụng mô hình MTCNN phát hiện khuôn mặt và cắt những khuôn mặt đó cho folder với nhãn tương ứng.
 - Sau đó kiểm tra bằng phương pháp thủ công để lọc những ảnh không đúng với nhãn.
 ## Chuẩn bị và huấn luyện mô hình nhận diện
